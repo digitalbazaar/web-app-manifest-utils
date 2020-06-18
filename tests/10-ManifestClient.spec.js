@@ -6,7 +6,7 @@ import https from 'https';
 import isNode from 'detect-node';
 
 const httpsAgent = new https.Agent({rejectUnauthorized: false});
-const baseUrl = 'https://uscis.interop.digitalbazaar.com/';
+const host = 'frontendmasters.com';
 
 describe(`Manifest Client`, () => {
   describe(`'/manifest.json' Tests`, () => {
@@ -14,7 +14,7 @@ describe(`Manifest Client`, () => {
       it(`successful manifest response with icons'`,
         async () => {
           const manifestClient = new ManifestClient({
-            baseUrl,
+            host,
             httpsAgent,
           });
 
@@ -27,14 +27,14 @@ describe(`Manifest Client`, () => {
           }
           should.exist(result);
           should.not.exist(err);
-          result.data.should.include.keys(['icons']);
+          result.should.include.keys(['icons']);
         }
       );
     } else {
       // KARMA TEST Only
       it(`fails due to CORS error'`,
         async () => {
-          const manifestClient = new ManifestClient({baseUrl});
+          const manifestClient = new ManifestClient({host});
 
           let result;
           let err;
