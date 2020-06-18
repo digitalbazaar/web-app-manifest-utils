@@ -7,22 +7,45 @@ const DEFAULT_HEADERS = {Accept: 'application/manifest+json, application/json'};
 
 export class ManifestClient {
   constructor({
-    baseUrl,
     defaultHeaders,
-    endpoint = 'manifest.json',
-    httpsAgent
+    host,
+    httpsAgent,
+    manifestProxyHost,
+    manifestProxyPath = '/manifest',
+    manifestProxy = false
   } = {}) {
-    this.baseUrl = baseUrl;
     this.defaultHeaders = {...DEFAULT_HEADERS, ...defaultHeaders};
-    this.endpoint = endpoint;
+    this.host = host;
     this.httpsAgent = httpsAgent;
+    this.manifestProxyHost = manifestProxyHost;
+    this.manifestProxyPath = manifestProxyPath;
+    this.manifestProxy = manifestProxy;
   }
 
   async getManifest() {
     const {
-      baseUrl, defaultHeaders: headers, endpoint, httpsAgent
+      host, defaultHeaders: headers, httpsAgent, manifestProxyHost,
+      manifestProxyPath, manifestProxy
     } = this;
-    const url = `${baseUrl}${endpoint}`;
-    return httpClient.get(url, {headers, httpsAgent});
+    const url = `https://${host}/manifest.json`;
+    let result;
+    try {
+      result = await httpClient.get(url, {headers, httpsAgent});
+    } catch(err) {
+      if(!(manifestProxy && err.message.includes('CORS'))) {
+        throw err;
+      }
+    }
+    if(result) {
+      return result.data;
+    }
+    // proxy the request
+    // TODO: use different httpsAgent?
+    const proxyUrl = manifestProxyHost ?
+      `https://${manifestProxyHost}${manifestProxyPath}` : manifestProxyPath;
+    result = await httpClient.get(proxyUrl, {
+      headers, httpsAgent, searchParams: {host}
+    });
+    return result.data;
   }
 }
