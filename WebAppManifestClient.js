@@ -48,29 +48,35 @@ export class WebAppManifestClient {
     return result.data;
   }
 
-  async getManifestWithIcon({origin, size}) {
+  async getManifestWithIcon({
+    colorScheme = 'light', defaultIcon, origin, size
+  }) {
     const {defaultHeaders: headers, httpsAgent} = this;
-    let manifest = null;
+    let manifest;
     let icon = {};
     try {
       manifest = await this.getManifest({origin});
     } catch(err) {
-      const favicon = await getFavicon({origin, headers, httpsAgent});
-      if(favicon) {
-        icon.src = favicon;
-        return {manifest, icon};
-      }
+      const favicon = await getFavicon({headers, httpsAgent, origin});
+      favicon ? icon.src = favicon : icon = defaultIcon;
+      return {manifest, icon};
     }
-    icon = await getWebAppManifestIcon({manifest, origin, size});
+    icon = await getWebAppManifestIcon({colorScheme, manifest, origin, size});
+    if(!icon) {
+      icon = {};
+      const favicon = await getFavicon({headers, httpsAgent, origin});
+      favicon ? icon.src = favicon : icon = defaultIcon;
+    }
     return {manifest, icon};
   }
 }
 
 async function getFavicon({origin, headers, httpsAgent}) {
   const url = `https://${origin}/favicon.ico`;
-  const result = await httpClient.head(url, {headers, httpsAgent});
-  if(result.status === 200) {
-    return url;
+  try {
+    await httpClient.head(url, {headers, httpsAgent});
+  } catch(err) {
+    return null;
   }
-  return null;
+  return url;
 }
