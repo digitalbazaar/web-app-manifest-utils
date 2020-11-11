@@ -22,14 +22,10 @@ export class WebAppManifestClient {
   }
 
   async getManifest({origin}) {
-    const {
-      host, defaultHeaders: headers, httpsAgent, manifestProxyHost,
-      manifestProxyPath, manifestProxy
-    } = this;
-    const url = `https://${origin}/manifest.json`;
+    const {manifestProxy} = this;
     let result;
     try {
-      result = await httpClient.get(url, {headers, httpsAgent});
+      result = await this.getManifestFromOrigin({origin});
     } catch(err) {
       if(!(manifestProxy && err.message.includes('CORS'))) {
         throw err;
@@ -39,13 +35,38 @@ export class WebAppManifestClient {
       return result.data;
     }
     // proxy the request
-    // TODO: use different httpsAgent?
+    result = await this.getManifestFromProxy();
+    return result.data;
+  }
+
+  async getManifestFromOrigin({origin}) {
+    const {defaultHeaders: headers, httpsAgent} = this;
+    const url = `https://${origin}/manifest.json`;
+    let result;
+    try {
+      result = await httpClient.get(url, {headers, httpsAgent});
+    } catch(err) {
+      throw err;
+    }
+    return result;
+  }
+
+  async getManifestFromProxy() {
+    const {
+      host, defaultHeaders: headers, httpsAgent, manifestProxyHost,
+      manifestProxyPath
+    } = this;
     const proxyUrl = manifestProxyHost ?
       `https://${manifestProxyHost}${manifestProxyPath}` : manifestProxyPath;
-    result = await httpClient.get(proxyUrl, {
-      headers, httpsAgent, searchParams: {host}
-    });
-    return result.data;
+    let result;
+    try {
+      result = await httpClient.get(proxyUrl, {
+        headers, httpsAgent, searchParams: {host}
+      });
+    } catch(err) {
+      throw err;
+    }
+    return result;
   }
 
   async getManifestWithIcon({
