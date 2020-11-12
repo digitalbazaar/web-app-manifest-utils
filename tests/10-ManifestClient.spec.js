@@ -8,7 +8,7 @@ import {mockManifests} from './mock-data.js';
 import nock from 'nock';
 
 const httpsAgent = new https.Agent({rejectUnauthorized: false});
-const origin = 'example.com';
+let origin = 'example.com';
 
 describe(`Manifest Client Nock Tests`, () => {
   describe(`'/manifest.json' Tests`, () => {
@@ -33,23 +33,24 @@ describe(`Manifest Client Nock Tests`, () => {
         }
       );
     } else {
-      // KARMA TEST Only
-      it(`fails due to CORS error'`,
-        async () => {
-          const manifestClient = new WebAppManifestClient();
+      describe('Karma Tests', function() {
+        it('fails due to CORS error',
+          async () => {
+            const manifestClient = new WebAppManifestClient();
 
-          let result;
-          let err;
-          try {
-            result = await manifestClient.getManifest({origin});
-          } catch(e) {
-            err = e;
+            let result;
+            let err;
+            try {
+              result = await manifestClient.getManifest({origin});
+            } catch(e) {
+              err = e;
+            }
+            console.log('ERROR --------->', err);
+            should.exist(err);
+            should.not.exist(result);
           }
-          console.log('ERROR --------->', err);
-          should.exist(err);
-          should.not.exist(result);
-        }
-      );
+        );
+      });
     }
   });
 
