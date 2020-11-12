@@ -44,8 +44,10 @@ export class WebAppManifestClient {
     const url = `https://${origin}/manifest.json`;
     let result;
     try {
+      console.log(url);
       result = await httpClient.get(url, {headers, httpsAgent});
     } catch(err) {
+      console.log('AAAAAAA', err);
       throw err;
     }
     return result;
