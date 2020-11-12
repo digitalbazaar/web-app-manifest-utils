@@ -78,6 +78,9 @@ export class WebAppManifestClient {
     try {
       manifest = await this.getManifest({origin});
     } catch(err) {
+      if(err.message.includes('CORS')) {
+        throw err;
+      }
       const favicon = await getFavicon({headers, httpsAgent, origin});
       favicon ? icon.src = favicon : icon = defaultIcon;
       return {manifest, icon};
