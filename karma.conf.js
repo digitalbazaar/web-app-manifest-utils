@@ -1,6 +1,7 @@
 /*
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
+const fs = require('fs');
 module.exports = function(config) {
 
   config.set({
@@ -86,9 +87,13 @@ module.exports = function(config) {
     // start these browsers
     // browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     //browsers: ['ChromeHeadless', 'Chrome', 'Firefox', 'Safari'],
-    browsers: ['ChromeHeadless'],
+    browsers: ['Chrome_without_security'],
 
     customLaunchers: {
+      Chrome_without_security: {
+        base: 'Chrome',
+        flags: ['--disable-web-security', '--disable-site-isolation-trials']
+      },
       IE9: {
         base: 'IE',
         'x-ua-compatible': 'IE=EmulateIE9'
@@ -117,8 +122,14 @@ module.exports = function(config) {
       }
     },
 
+    protocol: 'https:',
+    httpsServerOptions: {
+      key: fs.readFileSync(__dirname + '/tests/key.pem'),
+      cert: fs.readFileSync(__dirname + '/tests/cert.pem')
+    },
+
     // disable SSL certificate validation
-    proxyValidateSSL: false,
+    // proxyValidateSSL: false,
 
     // Proxied paths
     proxies: {}
