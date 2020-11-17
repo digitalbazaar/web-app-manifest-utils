@@ -9,12 +9,12 @@ const DEFAULT_HEADERS = {Accept: 'application/manifest+json, application/json'};
 export class WebAppManifestClient {
   constructor({
     defaultHeaders,
-    httpsAgent,
+    agent,
     manifestProxyHost,
     manifestProxyPath = '/manifest'
   } = {}) {
     this.defaultHeaders = {...DEFAULT_HEADERS, ...defaultHeaders};
-    this.httpsAgent = httpsAgent;
+    this.agent = agent;
     this.manifestProxyHost = manifestProxyHost;
     this.manifestProxyPath = manifestProxyPath;
   }
@@ -39,13 +39,12 @@ export class WebAppManifestClient {
   }
 
   async getManifestFromOrigin({origin}) {
-    const {defaultHeaders: headers, httpsAgent} = this;
+    const {defaultHeaders: headers, agent} = this;
     const url = `https://${origin}/manifest.json`;
     let result;
     try {
-      result = await httpClient.get(url, {headers, httpsAgent});
+      result = await httpClient.get(url, {headers, agent});
     } catch(err) {
-      console.log('EEEEEWEEEEEEE', err);
       throw err;
     }
     return result;
@@ -53,7 +52,7 @@ export class WebAppManifestClient {
 
   async getManifestFromProxy() {
     const {
-      host, defaultHeaders: headers, httpsAgent, manifestProxyHost,
+      host, defaultHeaders: headers, agent, manifestProxyHost,
       manifestProxyPath
     } = this;
     const proxyUrl = manifestProxyHost ?
@@ -61,7 +60,7 @@ export class WebAppManifestClient {
     let result;
     try {
       result = await httpClient.get(proxyUrl, {
-        headers, httpsAgent, searchParams: {host}
+        headers, agent, searchParams: {host}
       });
     } catch(err) {
       throw err;
@@ -72,30 +71,30 @@ export class WebAppManifestClient {
   async getManifestWithIcon({
     colorScheme = 'light', defaultIcon, origin, size
   }) {
-    const {defaultHeaders: headers, httpsAgent} = this;
+    const {defaultHeaders: headers, agent} = this;
     let manifest;
     let icon = {};
     try {
       manifest = await this.getManifest({origin});
     } catch(err) {
-      const favicon = await getFavicon({headers, httpsAgent, origin});
+      const favicon = await getFavicon({headers, agent, origin});
       favicon ? icon.src = favicon : icon = defaultIcon;
       return {manifest, icon};
     }
     icon = await getWebAppManifestIcon({colorScheme, manifest, origin, size});
     if(!icon) {
       icon = {};
-      const favicon = await getFavicon({headers, httpsAgent, origin});
+      const favicon = await getFavicon({headers, agent, origin});
       favicon ? icon.src = favicon : icon = defaultIcon;
     }
     return {manifest, icon};
   }
 }
 
-async function getFavicon({origin, headers, httpsAgent}) {
+async function getFavicon({origin, headers, agent}) {
   const url = `https://${origin}/favicon.ico`;
   try {
-    await httpClient.head(url, {headers, httpsAgent});
+    await httpClient.head(url, {headers, agent});
   } catch(err) {
     return null;
   }
