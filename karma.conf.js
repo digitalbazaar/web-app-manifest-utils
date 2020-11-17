@@ -87,11 +87,11 @@ module.exports = function(config) {
     // start these browsers
     // browser launchers: https://npmjs.org/browse/keyword/karma-launcher
     //browsers: ['ChromeHeadless', 'Chrome', 'Firefox', 'Safari'],
-    browsers: ['Chrome_without_security'],
+    browsers: ['ChromeHeadless_Ignore_SSL'],
 
     customLaunchers: {
-      Chrome_without_security: {
-        base: 'Chrome',
+      ChromeHeadless_Ignore_SSL: {
+        base: 'ChromeHeadless',
         flags: ['--ignore-certificate-errors']
       },
       IE9: {
