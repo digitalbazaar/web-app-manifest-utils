@@ -8,7 +8,7 @@ import isNode from 'detect-node';
 const agent = new https.Agent({rejectUnauthorized: false});
 const baseUrl = 'localhost:19451';
 
-describe('Manifest Client Nock Tests', () => {
+describe('Manifest Client Server Tests', () => {
   describe(`'/manifest.json' Tests`, () => {
     if(!isNode) {
       it('fails due to CORS error',
