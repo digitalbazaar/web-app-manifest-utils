@@ -15,9 +15,7 @@ server1.get('/manifest.json', function(req, res) {
   const manifest = mockManifests.basicManifest;
   res.json(manifest);
 });
-// server1.listen(19450, function() {
-//   console.log('Web server without CORS listening on port 19450');
-// });
+
 https.createServer({
   key: fs.readFileSync(__dirname + '/key.pem'),
   cert: fs.readFileSync(__dirname + '/cert.pem')
@@ -51,10 +49,7 @@ server2.get('/no-manifest/no-favicon/manifest.json', function(req, res) {
   res.status(404);
   res.send('HTTPError');
 });
-// server2.get('/no-manifest-no-favicon/manifest.json', function(req, res) {
-//   res.status(404);
-//   res.send('HTTPError');
-// });
+
 server2.head('/*/no-favicon/favicon.ico', function(req, res) {
   res.status(404);
   res.send('HTTPError');
@@ -64,13 +59,9 @@ server2.head('/*/favicon.ico', function(req, res) {
   res.send('OK.');
 });
 
-// server2.listen(19451, function() {
-//   console.log('CORS-enabled web server listening on port 19451');
-// });
 https.createServer({
   key: fs.readFileSync(__dirname + '/key.pem'),
   cert: fs.readFileSync(__dirname + '/cert.pem')
 }, server2).listen(19451, function() {
   console.log('CORS-enabled web server listening on port 19451');
 });
-

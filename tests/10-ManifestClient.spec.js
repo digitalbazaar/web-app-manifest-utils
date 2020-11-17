@@ -42,7 +42,6 @@ describe('Manifest Client Server Tests', () => {
         try {
           result = await manifestClient.getManifest({origin});
         } catch(e) {
-          console.log(e);
           err = e;
         }
         should.exist(result);
