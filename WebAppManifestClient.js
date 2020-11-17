@@ -11,31 +11,30 @@ export class WebAppManifestClient {
     defaultHeaders,
     httpsAgent,
     manifestProxyHost,
-    manifestProxyPath = '/manifest',
-    manifestProxy = false
+    manifestProxyPath = '/manifest'
   } = {}) {
     this.defaultHeaders = {...DEFAULT_HEADERS, ...defaultHeaders};
     this.httpsAgent = httpsAgent;
     this.manifestProxyHost = manifestProxyHost;
     this.manifestProxyPath = manifestProxyPath;
-    this.manifestProxy = manifestProxy;
   }
 
   async getManifest({origin}) {
-    const {manifestProxy} = this;
+    const {manifestProxyHost} = this;
     let result;
     try {
       result = await this.getManifestFromOrigin({origin});
     } catch(err) {
-      if(!(manifestProxy && err.message.includes('CORS'))) {
+      if(err.status === 404) {
         throw err;
       }
+      // proxy the request
+      if(manifestProxyHost) {
+        result = await this.getManifestFromProxy();
+        return result.data;
+      }
+      throw err;
     }
-    if(result) {
-      return result.data;
-    }
-    // proxy the request
-    result = await this.getManifestFromProxy();
     return result.data;
   }
 
@@ -44,10 +43,9 @@ export class WebAppManifestClient {
     const url = `https://${origin}/manifest.json`;
     let result;
     try {
-      console.log(url);
       result = await httpClient.get(url, {headers, httpsAgent});
     } catch(err) {
-      console.log('AAAAAAA', err);
+      console.log('EEEEEWEEEEEEE', err);
       throw err;
     }
     return result;
@@ -80,9 +78,6 @@ export class WebAppManifestClient {
     try {
       manifest = await this.getManifest({origin});
     } catch(err) {
-      if(err.message.includes('CORS')) {
-        throw err;
-      }
       const favicon = await getFavicon({headers, httpsAgent, origin});
       favicon ? icon.src = favicon : icon = defaultIcon;
       return {manifest, icon};
