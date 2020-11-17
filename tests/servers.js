@@ -29,6 +29,10 @@ server2.get('/basic/manifest.json', function(req, res) {
   const manifest = mockManifests.basicManifest;
   res.json(manifest);
 });
+server2.get('/proxy/manifest.json', function(req, res) {
+  const manifest = mockManifests.basicManifest;
+  res.json(manifest);
+});
 server2.get('/full/manifest.json', function(req, res) {
   const manifest = mockManifests.fullManifest;
   res.json(manifest);
