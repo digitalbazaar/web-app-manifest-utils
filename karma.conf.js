@@ -117,6 +117,9 @@ module.exports = function(config) {
       }
     },
 
+    // disable SSL certificate validation
+    proxyValidateSSL: false,
+
     // Proxied paths
     proxies: {}
   });
