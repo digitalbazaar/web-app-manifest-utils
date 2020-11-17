@@ -11,7 +11,7 @@ export class WebAppManifestClient {
     defaultHeaders,
     agent,
     manifestProxyHost,
-    manifestProxyPath = '/manifest'
+    manifestProxyPath = '/manifest.json'
   } = {}) {
     this.defaultHeaders = {...DEFAULT_HEADERS, ...defaultHeaders};
     this.agent = agent;
