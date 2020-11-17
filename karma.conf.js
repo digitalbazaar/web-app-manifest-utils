@@ -92,7 +92,7 @@ module.exports = function(config) {
     customLaunchers: {
       Chrome_without_security: {
         base: 'Chrome',
-        flags: ['--disable-web-security', '--disable-site-isolation-trials']
+        flags: ['--ignore-certificate-errors']
       },
       IE9: {
         base: 'IE',
