@@ -5,20 +5,15 @@ import {WebAppManifestClient} from '..';
 import https from 'https';
 import isNode from 'detect-node';
 
-const httpsAgent = new https.Agent({rejectUnauthorized: false});
-let baseUrl;
-if(isNode) {
-  baseUrl = 'localhost:19450';
-} else {
-  baseUrl = 'localhost:19451';
-}
+const agent = new https.Agent({rejectUnauthorized: false});
+const baseUrl = 'localhost:19451';
 
 describe('Manifest Client Nock Tests', () => {
-  describe.only(`'/manifest.json' Tests`, () => {
+  describe(`'/manifest.json' Tests`, () => {
     if(!isNode) {
       it('fails due to CORS error',
         async () => {
-          const origin = `localhost:19450`;
+          const origin = 'localhost:19450';
 
           const manifestClient = new WebAppManifestClient();
 
@@ -40,7 +35,7 @@ describe('Manifest Client Nock Tests', () => {
         const manifestType = 'basic';
         const origin = `${baseUrl}/${manifestType}`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
 
         let result;
         let err;
@@ -63,7 +58,7 @@ describe('Manifest Client Nock Tests', () => {
         const manifestType = 'basic';
         const origin = `${baseUrl}/${manifestType}`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
 
         let result;
@@ -86,7 +81,7 @@ describe('Manifest Client Nock Tests', () => {
         const manifestType = 'full';
         const origin = `${baseUrl}/${manifestType}`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
         const colorScheme = 'light';
 
@@ -113,7 +108,7 @@ describe('Manifest Client Nock Tests', () => {
         const manifestType = 'full';
         const origin = `${baseUrl}/${manifestType}`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
         const colorScheme = 'dark';
 
@@ -143,7 +138,7 @@ describe('Manifest Client Nock Tests', () => {
         const manifestType = 'no-manifest';
         const origin = `${baseUrl}/${manifestType}`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
 
         let result;
@@ -167,7 +162,7 @@ describe('Manifest Client Nock Tests', () => {
         const manifestType = 'no-icons';
         const origin = `${baseUrl}/${manifestType}`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
 
         let result;
@@ -194,9 +189,9 @@ describe('Manifest Client Nock Tests', () => {
     it('no manifest exists with no favicon',
       async () => {
         const manifestType = 'no-manifest';
-        const origin = `${baseUrl}/${manifestType}`;
+        const origin = `${baseUrl}/${manifestType}/no-favicon`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
 
         let result;
@@ -217,9 +212,9 @@ describe('Manifest Client Nock Tests', () => {
     it('manifest with no icons with no favicon',
       async () => {
         const manifestType = 'no-icons';
-        const origin = `${baseUrl}/${manifestType}`;
+        const origin = `${baseUrl}/${manifestType}/no-favicon`;
 
-        const manifestClient = new WebAppManifestClient({httpsAgent});
+        const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
 
         let result;

@@ -11,20 +11,8 @@ const server1 = express();
 const server2 = express();
 
 // web server without CORS
-server1.get('/basic/manifest.json', function(req, res) {
+server1.get('/manifest.json', function(req, res) {
   const manifest = mockManifests.basicManifest;
-  res.json(manifest);
-});
-server1.get('/full/manifest.json', function(req, res) {
-  const manifest = mockManifests.fullManifest;
-  res.json(manifest);
-});
-server2.get('/no-icons/manifest.json', function(req, res) {
-  const manifest = mockManifests.noIconsManifest;
-  res.json(manifest);
-});
-server1.get('/no-manifest/manifest.json', function(req, res) {
-  const manifest = undefined;
   res.json(manifest);
 });
 // server1.listen(19450, function() {
@@ -51,9 +39,29 @@ server2.get('/no-icons/manifest.json', function(req, res) {
   const manifest = mockManifests.noIconsManifest;
   res.json(manifest);
 });
-server2.get('/no-manifest/manifest.json', function(req, res) {
-  const manifest = undefined;
+server2.get('/no-icons/no-favicon/manifest.json', function(req, res) {
+  const manifest = mockManifests.noIconsManifest;
   res.json(manifest);
+});
+server2.get('/no-manifest/manifest.json', function(req, res) {
+  res.status(404);
+  res.send('HTTPError');
+});
+server2.get('/no-manifest/no-favicon/manifest.json', function(req, res) {
+  res.status(404);
+  res.send('HTTPError');
+});
+// server2.get('/no-manifest-no-favicon/manifest.json', function(req, res) {
+//   res.status(404);
+//   res.send('HTTPError');
+// });
+server2.head('/*/no-favicon/favicon.ico', function(req, res) {
+  res.status(404);
+  res.send('HTTPError');
+});
+server2.head('/*/favicon.ico', function(req, res) {
+  res.status(200);
+  res.send('OK.');
 });
 
 // server2.listen(19451, function() {
