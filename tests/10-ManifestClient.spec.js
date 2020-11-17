@@ -10,26 +10,6 @@ const baseUrl = 'localhost:19451';
 
 describe('Manifest Client Server Tests', () => {
   describe(`'/manifest.json' Tests`, () => {
-    if(!isNode) {
-      it('fails due to CORS error',
-        async () => {
-          const origin = 'localhost:19450';
-
-          const manifestClient = new WebAppManifestClient();
-
-          let result;
-          let err;
-          try {
-            result = await manifestClient.getManifest({origin});
-          } catch(e) {
-            err = e;
-          }
-          console.log('ERROR --------->', err);
-          should.exist(err);
-          should.not.exist(result);
-        }
-      );
-    }
     it('successful manifest response',
       async () => {
         const manifestType = 'basic';
@@ -50,6 +30,50 @@ describe('Manifest Client Server Tests', () => {
       }
     );
   });
+
+  if(!isNode) {
+    describe(`'/manifest.json' CORS Tests`, () => {
+      it('fails due to CORS error',
+        async () => {
+          const origin = 'localhost:19450';
+
+          const manifestClient = new WebAppManifestClient();
+
+          let result;
+          let err;
+          try {
+            result = await manifestClient.getManifest({origin});
+          } catch(e) {
+            err = e;
+          }
+          console.log('ERROR --------->', err);
+          should.exist(err);
+          should.not.exist(result);
+        }
+      );
+      it('successful manifest response via proxy',
+        async () => {
+          const origin = 'localhost:19450';
+          const manifestProxyHost = `${baseUrl}/proxy`;
+
+          const manifestClient = new WebAppManifestClient({
+            agent, manifestProxyHost
+          });
+
+          let result;
+          let err;
+          try {
+            result = await manifestClient.getManifest({origin});
+          } catch(e) {
+            err = e;
+          }
+          should.exist(result);
+          should.not.exist(err);
+          result.should.include.keys(['icons']);
+        }
+      );
+    });
+  }
 
   describe(`'/manifest.json' Icon Tests`, () => {
     it('manifest response with icon',
