@@ -104,6 +104,13 @@ module.exports = function(config) {
       }
     },
 
+    // allows use of https
+    protocol: 'https:',
+    httpsServerOptions: {
+      key: fs.readFileSync(__dirname + '/tests/key.pem'),
+      cert: fs.readFileSync(__dirname + '/tests/cert.pem')
+    },
+
     // Continuous Integration mode
     // if true, Karma captures browsers, runs the tests and exits
     singleRun: true,
@@ -121,15 +128,6 @@ module.exports = function(config) {
         //delay: true
       }
     },
-
-    protocol: 'https:',
-    httpsServerOptions: {
-      key: fs.readFileSync(__dirname + '/tests/key.pem'),
-      cert: fs.readFileSync(__dirname + '/tests/cert.pem')
-    },
-
-    // disable SSL certificate validation
-    // proxyValidateSSL: false,
 
     // Proxied paths
     proxies: {}
