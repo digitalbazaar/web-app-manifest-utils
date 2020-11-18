@@ -6,7 +6,7 @@ import https from 'https';
 import isNode from 'detect-node';
 
 const agent = new https.Agent({rejectUnauthorized: false});
-const baseUrl = 'localhost:19451';
+const baseUrl = 'https://localhost:19451';
 
 describe('Manifest Client Server Tests', () => {
   describe(`'/manifest.json' Tests`, () => {
@@ -35,7 +35,7 @@ describe('Manifest Client Server Tests', () => {
     describe(`'/manifest.json' CORS Tests`, () => {
       it('fails due to CORS error',
         async () => {
-          const origin = 'localhost:19450';
+          const origin = 'https://localhost:19450';
 
           const manifestClient = new WebAppManifestClient();
 
@@ -53,7 +53,7 @@ describe('Manifest Client Server Tests', () => {
       );
       it('successful manifest response via proxy',
         async () => {
-          const origin = 'localhost:19450';
+          const origin = 'https://localhost:19450';
           const manifestProxyHost = `${baseUrl}/proxy`;
 
           const manifestClient = new WebAppManifestClient({
@@ -91,6 +91,7 @@ describe('Manifest Client Server Tests', () => {
         } catch(e) {
           err = e;
         }
+        console.log(result);
         should.exist(result);
         should.not.exist(err);
         result.should.be.an('object');
