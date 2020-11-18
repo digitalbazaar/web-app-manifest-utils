@@ -42,8 +42,8 @@ import https from 'https';
 const agent = new https.Agent({rejectUnauthorized: false});
 
 // example origin & manifestProxyHost (localhost)
-const origin = `localhost:19450`;
-const manifestProxyHost = `localhost:19451`;
+const origin = `https://localhost:19450`;
+const manifestProxyHost = `https://localhost:19451`;
 
 const manifestClient = new WebAppManifestClient({agent, manifestProxyHost});
 const result = await manifestClient.getManifest({origin});
@@ -57,7 +57,7 @@ import https from 'https';
 const agent = new https.Agent({rejectUnauthorized: false});
 
 // example origin (localhost)
-const origin = `localhost:19451`;
+const origin = `https://localhost:19451`;
 
 const manifestClient = new WebAppManifestClient({agent});
 const result = await manifestClient.getManifestFromOrigin({origin});
@@ -71,7 +71,7 @@ import https from 'https';
 const agent = new https.Agent({rejectUnauthorized: false});
 
 // manifestProxyHost (localhost)
-const manifestProxyHost = `localhost:19451`;
+const manifestProxyHost = `https://localhost:19451`;
 
 const manifestClient = new WebAppManifestClient({agent, manifestProxyHost});
 const result = await manifestClient.getManifestFromProxy());
@@ -85,8 +85,8 @@ import https from 'https';
 const agent = new https.Agent({rejectUnauthorized: false});
 
 // example origin & manifestProxyHost (localhost)
-const origin = `localhost:19450`;
-const manifestProxyHost = `localhost:19451`;
+const origin = `https://localhost:19450`;
+const manifestProxyHost = `https://localhost:19451`;
 
 const colorScheme = 'light';
 const defaultIcon = 'https://localhost:19451/default-icon.png'
