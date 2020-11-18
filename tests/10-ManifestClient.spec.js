@@ -91,7 +91,6 @@ describe('Manifest Client Server Tests', () => {
         } catch(e) {
           err = e;
         }
-        console.log(result);
         should.exist(result);
         should.not.exist(err);
         result.should.be.an('object');
