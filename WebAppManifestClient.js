@@ -78,14 +78,20 @@ export class WebAppManifestClient {
       manifest = await this.getManifest({origin});
     } catch(err) {
       const favicon = await getFavicon({headers, agent, origin});
-      favicon ? icon.src = favicon : icon = defaultIcon;
+      favicon ? icon.src = favicon : icon.src = defaultIcon;
+      if(!icon.src) {
+        icon = undefined;
+      }
       return {manifest, icon};
     }
     icon = await getWebAppManifestIcon({colorScheme, manifest, origin, size});
     if(!icon) {
       icon = {};
       const favicon = await getFavicon({headers, agent, origin});
-      favicon ? icon.src = favicon : icon = defaultIcon;
+      favicon ? icon.src = favicon : icon.src = defaultIcon;
+    }
+    if(!icon.src) {
+      icon = undefined;
     }
     return {manifest, icon};
   }
