@@ -40,7 +40,7 @@ export class WebAppManifestClient {
 
   async getManifestFromOrigin({origin}) {
     const {defaultHeaders: headers, agent} = this;
-    const url = `https://${origin}/manifest.json`;
+    const url = `${origin}/manifest.json`;
     let result;
     try {
       result = await httpClient.get(url, {headers, agent});
@@ -56,7 +56,7 @@ export class WebAppManifestClient {
       manifestProxyPath
     } = this;
     const proxyUrl = manifestProxyHost ?
-      `https://${manifestProxyHost}${manifestProxyPath}` : manifestProxyPath;
+      `${manifestProxyHost}${manifestProxyPath}` : manifestProxyPath;
     let result;
     try {
       result = await httpClient.get(proxyUrl, {
@@ -98,7 +98,7 @@ export class WebAppManifestClient {
 }
 
 async function getFavicon({origin, headers, agent}) {
-  const url = `https://${origin}/favicon.ico`;
+  const url = `${origin}/favicon.ico`;
   try {
     await httpClient.head(url, {headers, agent});
   } catch(err) {
