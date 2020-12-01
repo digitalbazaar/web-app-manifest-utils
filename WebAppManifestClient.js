@@ -95,6 +95,23 @@ export class WebAppManifestClient {
     }
     return {manifest, icon};
   }
+
+  async getManifestIcon({
+    colorScheme = 'light', defaultIcon, manifest, origin, size
+  }) {
+    const {defaultHeaders: headers, agent} = this;
+    let icon = {};
+    icon = await getWebAppManifestIcon({colorScheme, manifest, origin, size});
+    if(!icon) {
+      icon = {};
+      const favicon = await getFavicon({headers, agent, origin});
+      favicon ? icon.src = favicon : icon.src = defaultIcon;
+    }
+    if(!icon.src) {
+      icon = undefined;
+    }
+    return icon;
+  }
 }
 
 async function getFavicon({origin, headers, agent}) {
