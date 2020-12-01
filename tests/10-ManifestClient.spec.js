@@ -4,6 +4,7 @@
 import {WebAppManifestClient} from '..';
 import https from 'https';
 import isNode from 'detect-node';
+import {mockManifests} from './mock-data.js';
 
 const agent = new https.Agent({rejectUnauthorized: false});
 const baseUrl = 'https://localhost:19451';
@@ -151,6 +152,82 @@ describe('Manifest Client Server Tests', () => {
         result.manifest.should.be.an('object');
         result.icon.should.be.an('object');
         result.icon.color_scheme.should.equal('dark');
+      }
+    );
+    it('successfully gets only icon',
+      async () => {
+        const manifest = mockManifests.basicManifest;
+        const manifestType = 'basic';
+        const origin = `${baseUrl}/${manifestType}`;
+
+        const manifestClient = new WebAppManifestClient({agent});
+        const size = 192;
+
+        let result;
+        let err;
+        try {
+          result = await manifestClient.getManifestIcon({
+            size, manifest, origin
+          });
+        } catch(e) {
+          err = e;
+        }
+        should.exist(result);
+        should.not.exist(err);
+        result.should.be.an('object');
+        result.should.include.keys(['src']);
+      }
+    );
+    it('successfully gets only light icon',
+      async () => {
+        const manifest = mockManifests.fullManifest;
+        const manifestType = 'full';
+        const origin = `${baseUrl}/${manifestType}`;
+
+        const manifestClient = new WebAppManifestClient({agent});
+        const size = 192;
+        const colorScheme = 'light';
+
+        let result;
+        let err;
+        try {
+          result = await manifestClient.getManifestIcon({
+            colorScheme, size, manifest, origin
+          });
+        } catch(e) {
+          err = e;
+        }
+        should.exist(result);
+        should.not.exist(err);
+        result.should.be.an('object');
+        result.should.include.keys(['src']);
+        result.color_scheme.should.equal('light');
+      }
+    );
+    it('successfully gets only dark icon',
+      async () => {
+        const manifest = mockManifests.fullManifest;
+        const manifestType = 'full';
+        const origin = `${baseUrl}/${manifestType}`;
+
+        const manifestClient = new WebAppManifestClient({agent});
+        const size = 192;
+        const colorScheme = 'dark';
+
+        let result;
+        let err;
+        try {
+          result = await manifestClient.getManifestIcon({
+            colorScheme, size, manifest, origin
+          });
+        } catch(e) {
+          err = e;
+        }
+        should.exist(result);
+        should.not.exist(err);
+        result.should.be.an('object');
+        result.should.include.keys(['src']);
+        result.color_scheme.should.equal('dark');
       }
     );
   });
