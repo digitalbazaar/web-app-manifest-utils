@@ -19,7 +19,7 @@ export class WebAppManifestClient {
     this.manifestProxyPath = manifestProxyPath;
   }
 
-  async getManifest({origin}) {
+  async getManifest({origin} = {}) {
     const {manifestProxyHost} = this;
     let result;
     try {
@@ -38,7 +38,10 @@ export class WebAppManifestClient {
     return result.data;
   }
 
-  async getManifestFromOrigin({origin}) {
+  async getManifestFromOrigin({origin} = {}) {
+    if(!(origin && typeof origin === 'string')) {
+      throw new TypeError('"origin" must be a non-empty string.');
+    }
     const {defaultHeaders: headers, agent} = this;
     const url = `${origin}/manifest.json`;
     let result;
@@ -70,56 +73,32 @@ export class WebAppManifestClient {
 
   async getManifestWithIcon({
     colorScheme = 'light', defaultIcon, origin, size
-  }) {
-    const {defaultHeaders: headers, agent} = this;
+  } = {}) {
     let manifest;
     let icon = {};
     try {
       manifest = await this.getManifest({origin});
     } catch(err) {
-      const favicon = await getFavicon({headers, agent, origin});
-      favicon ? icon.src = favicon : icon.src = defaultIcon;
-      if(!icon.src) {
-        icon = undefined;
-      }
+      defaultIcon ? icon.src = defaultIcon : icon.src =
+        `${origin}/favicon.ico`;
       return {manifest, icon};
     }
-    icon = await getWebAppManifestIcon({colorScheme, manifest, origin, size});
-    if(!icon) {
-      icon = {};
-      const favicon = await getFavicon({headers, agent, origin});
-      favicon ? icon.src = favicon : icon.src = defaultIcon;
-    }
-    if(!icon.src) {
-      icon = undefined;
-    }
+    icon = await this.getManifestIcon({
+      colorScheme, defaultIcon, manifest, origin, size
+    });
     return {manifest, icon};
   }
 
   async getManifestIcon({
     colorScheme = 'light', defaultIcon, manifest, origin, size
-  }) {
-    const {defaultHeaders: headers, agent} = this;
+  } = {}) {
     let icon = {};
     icon = await getWebAppManifestIcon({colorScheme, manifest, origin, size});
     if(!icon) {
       icon = {};
-      const favicon = await getFavicon({headers, agent, origin});
-      favicon ? icon.src = favicon : icon.src = defaultIcon;
-    }
-    if(!icon.src) {
-      icon = undefined;
+      defaultIcon ? icon.src = defaultIcon : icon.src =
+        `${origin}/favicon.ico`;
     }
     return icon;
   }
-}
-
-async function getFavicon({origin, headers, agent}) {
-  const url = `${origin}/favicon.ico`;
-  try {
-    await httpClient.head(url, {headers, agent});
-  } catch(err) {
-    return null;
-  }
-  return url;
 }

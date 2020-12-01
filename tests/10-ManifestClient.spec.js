@@ -285,19 +285,22 @@ describe('Manifest Client Server Tests', () => {
     );
   });
 
-  describe(`'/manifest.json' With No Favicon Tests`, () => {
-    it('no manifest exists with no favicon',
+  describe(`'/manifest.json' With defaultIcon Fallback Tests`, () => {
+    it('no manifest exists with defaultIcon',
       async () => {
         const manifestType = 'no-manifest';
-        const origin = `${baseUrl}/${manifestType}/no-favicon`;
+        const origin = `${baseUrl}/${manifestType}`;
 
         const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
+        const defaultIcon = 'https://example.com/defaulticon.png';
 
         let result;
         let err;
         try {
-          result = await manifestClient.getManifestWithIcon({origin, size});
+          result = await manifestClient.getManifestWithIcon({
+            defaultIcon, origin, size
+          });
         } catch(e) {
           err = e;
         }
@@ -306,22 +309,23 @@ describe('Manifest Client Server Tests', () => {
         result.should.be.an('object');
         result.should.include.keys(['manifest', 'icon']);
         should.equal(result.manifest, undefined);
-        should.equal(result.icon, undefined);
+        result.icon.src.should.include('defaulticon.png');
       }
     );
-    it('manifest with no icons with no favicon',
+    it('manifest with no icons with defaultIcon',
       async () => {
         const manifestType = 'no-icons';
-        const origin = `${baseUrl}/${manifestType}/no-favicon`;
+        const origin = `${baseUrl}/${manifestType}`;
 
         const manifestClient = new WebAppManifestClient({agent});
         const size = 192;
+        const defaultIcon = 'https://example.com/defaulticon.png';
 
         let result;
         let err;
         try {
           result = await manifestClient.getManifestWithIcon({
-            size, origin
+            defaultIcon, size, origin
           });
         } catch(e) {
           err = e;
@@ -331,7 +335,7 @@ describe('Manifest Client Server Tests', () => {
         result.should.be.an('object');
         result.should.include.keys(['manifest', 'icon']);
         result.manifest.should.be.an('object');
-        should.equal(result.icon, undefined);
+        result.icon.src.should.include('defaulticon.png');
       }
     );
   });
