@@ -79,8 +79,7 @@ export class WebAppManifestClient {
     try {
       manifest = await this.getManifest({origin});
     } catch(err) {
-      defaultIcon ? icon.src = defaultIcon : icon.src =
-        `${origin}/favicon.ico`;
+      icon.src = defaultIcon || `${origin}/favicon.ico`;
       return {manifest, icon};
     }
     icon = await this.getManifestIcon({
