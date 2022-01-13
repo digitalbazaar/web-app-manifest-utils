@@ -1,6 +1,6 @@
 {
   "name": "@digitalbazaar/web-app-manifest-utils",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Web App Manifest Utils",
   "main": "index.js",
   "scripts": {
