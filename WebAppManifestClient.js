@@ -95,8 +95,7 @@ export class WebAppManifestClient {
     icon = await getWebAppManifestIcon({colorScheme, manifest, origin, size});
     if(!icon) {
       icon = {};
-      defaultIcon ? icon.src = defaultIcon : icon.src =
-        `${origin}/favicon.ico`;
+      icon.src = defaultIcon || `${origin}/favicon.ico`;
     }
     return icon;
   }
