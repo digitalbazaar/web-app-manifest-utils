@@ -1,7 +1,8 @@
-/*
- * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
+/*!
+ * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
  */
 const fs = require('fs');
+const path = require('path');
 module.exports = function(config) {
 
   config.set({
@@ -60,6 +61,12 @@ module.exports = function(config) {
         // process: false,
         // crypto: false,
         // setImmediate: false
+      },
+      resolve: {
+        alias: {
+          [path.resolve(__dirname, 'tests/httpsAgent.js')]:
+            path.resolve(__dirname, 'tests/httpsAgent-browser.js')
+        }
       }
     },
 

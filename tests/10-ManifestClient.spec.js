@@ -1,12 +1,11 @@
 /*!
- * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
  */
 import {WebAppManifestClient} from '..';
-import https from 'https';
 import isNode from 'detect-node';
 import {mockManifests} from './mock-data.js';
+import {agent} from './httpsAgent.js';
 
-const agent = new https.Agent({rejectUnauthorized: false});
 const baseUrl = 'https://localhost:19451';
 
 describe('Manifest Client Server Tests', () => {
@@ -47,7 +46,6 @@ describe('Manifest Client Server Tests', () => {
           } catch(e) {
             err = e;
           }
-          console.log('ERROR --------->', err);
           should.exist(err);
           should.not.exist(result);
         }
