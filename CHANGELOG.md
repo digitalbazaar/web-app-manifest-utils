@@ -1,6 +1,6 @@
 # @digitalbazaar/web-app-manifest-utils ChangeLog
 
-## 1.0.1 - 2022-01-xx
+## 1.0.1 - 2022-01-14
 
 ### Fixed
 - Only use `colorScheme` if provided to `getWebAppManifestIcon`.
