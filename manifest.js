@@ -1,7 +1,6 @@
 /*!
- * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
  */
-
 export function getWebAppManifestIcon({colorScheme, manifest, origin, size}) {
   let best = null;
   // find largest square icon that is at least 48px wide
@@ -9,7 +8,7 @@ export function getWebAppManifestIcon({colorScheme, manifest, origin, size}) {
     for(const icon of manifest.icons) {
       try {
         const {color_scheme, sizes, src} = icon;
-        if(color_scheme && color_scheme !== colorScheme) {
+        if(colorScheme && color_scheme && color_scheme !== colorScheme) {
           continue;
         }
         if(typeof sizes === 'string' && typeof src === 'string') {
