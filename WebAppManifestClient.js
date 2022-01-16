@@ -46,7 +46,9 @@ export class WebAppManifestClient {
     const url = `${origin}/manifest.json`;
     let result;
     try {
-      result = await httpClient.get(url, {headers, agent});
+      result = await httpClient.get(url, {
+        headers, agent, credentials: 'omit'
+      });
     } catch(err) {
       throw err;
     }
@@ -63,7 +65,8 @@ export class WebAppManifestClient {
     let result;
     try {
       result = await httpClient.get(proxyUrl, {
-        headers, agent, searchParams: {host}
+        headers, agent, searchParams: {host},
+        credentials: 'omit'
       });
     } catch(err) {
       throw err;
