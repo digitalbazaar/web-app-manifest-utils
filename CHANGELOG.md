@@ -1,6 +1,6 @@
 # @digitalbazaar/web-app-manifest-utils ChangeLog
 
-## 1.0.2 - 2022-01-xx
+## 1.0.2 - 2022-01-16
 
 ### Fixed
 - Request web app manifests without credentials.
