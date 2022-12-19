@@ -1,11 +1,18 @@
 /*!
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
-const express = require('express');
-const cors = require('cors');
-const fs = require('fs');
-const https = require('https');
-const {mockManifests} = require('./mock-data.js');
+import express from 'express';
+import cors from 'cors';
+import {fileURLToPath} from 'node:url';
+import fs from 'node:fs';
+import https from 'node:https';
+import {mockManifests} from './mock-data.js';
+import path from 'node:path';
+
+export const config = {};
+
+// set `__dirname` constant
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const server1 = express();
 const server2 = express();

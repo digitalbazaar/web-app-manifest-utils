@@ -1,34 +1,32 @@
 /*!
  * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
  */
-import {WebAppManifestClient} from '..';
+import {agent} from './httpsAgent.js';
 import isNode from 'detect-node';
 import {mockManifests} from './mock-data.js';
-import {agent} from './httpsAgent.js';
+import {WebAppManifestClient} from '../lib/index.js';
 
 const baseUrl = 'https://localhost:19451';
 
 describe('Manifest Client Server Tests', () => {
   describe(`'/manifest.json' Tests`, () => {
-    it('successful manifest response',
-      async () => {
-        const manifestType = 'basic';
-        const origin = `${baseUrl}/${manifestType}`;
+    it('successful manifest response', async () => {
+      const manifestType = 'basic';
+      const origin = `${baseUrl}/${manifestType}`;
 
-        const manifestClient = new WebAppManifestClient({agent});
+      const manifestClient = new WebAppManifestClient({agent});
 
-        let result;
-        let err;
-        try {
-          result = await manifestClient.getManifest({origin});
-        } catch(e) {
-          err = e;
-        }
-        should.exist(result);
-        should.not.exist(err);
-        result.should.include.keys(['icons']);
+      let result;
+      let err;
+      try {
+        result = await manifestClient.getManifest({origin});
+      } catch(e) {
+        err = e;
       }
-    );
+      should.exist(result);
+      should.not.exist(err);
+      result.should.include.keys(['icons']);
+    });
   });
 
   if(!isNode) {

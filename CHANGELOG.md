@@ -1,5 +1,13 @@
 # @digitalbazaar/web-app-manifest-utils ChangeLog
 
+## 2.0.0 - 2022-12-dd
+
+### Changed
+- **BREAKING**: Convert to module (ESM).
+- **BREAKING**: Require Node.js >=16.
+- Update dependencies.
+- Lint module.
+
 ## 1.0.2 - 2022-01-16
 
 ### Fixed

@@ -1,7 +1,7 @@
 /*!
- * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
+ * Copyright (c) 2020-2022 Digital Bazaar, Inc. All rights reserved.
  */
-const mockManifests = {
+export const mockManifests = {
   basicManifest: {
     name: 'Mock Basic Manifest',
     icons: [
@@ -59,5 +59,3 @@ const mockManifests = {
     display: 'standalone'
   },
 };
-
-module.exports = {mockManifests};
