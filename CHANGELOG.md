@@ -1,6 +1,6 @@
 # @digitalbazaar/web-app-manifest-utils ChangeLog
 
-## 2.0.0 - 2022-12-dd
+## 2.0.0 - 2022-12-19
 
 ### Changed
 - **BREAKING**: Convert to module (ESM).
