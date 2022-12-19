@@ -1,8 +1,8 @@
 /*!
  * Copyright (c) 2020 Digital Bazaar, Inc. All rights reserved.
  */
-import express from 'express';
 import cors from 'cors';
+import express from 'express';
 import {fileURLToPath} from 'node:url';
 import fs from 'node:fs';
 import https from 'node:https';
