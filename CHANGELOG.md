@@ -1,6 +1,6 @@
 # @digitalbazaar/web-app-manifest-utils ChangeLog
 
-## 2.1.0 - 2024-10-dd
+## 2.1.0 - 2024-10-15
 
 ### Changed
 - Update dependencies.
