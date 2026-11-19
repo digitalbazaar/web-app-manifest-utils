@@ -228,6 +228,42 @@ describe('Manifest Client Server Tests', () => {
     );
   });
 
+  describe(`'/manifest.json' Icon Sizes Tests`, () => {
+    const origin = `${baseUrl}/basic`;
+    const manifestClient = new WebAppManifestClient({agent});
+
+    it('chooses a `sizes: "any"` icon for any requested size', async () => {
+      const manifest = mockManifests.anySizeManifest;
+      for(const size of [16, 192, 512]) {
+        const result = await manifestClient.getManifestIcon({
+          size, manifest, origin
+        });
+        result.src.should.equal(`${origin}/mock-image.svg`);
+      }
+    });
+    it('chooses an icon from a `sizes` list', async () => {
+      const manifest = mockManifests.sizeListManifest;
+      const result = await manifestClient.getManifestIcon({
+        size: 48, manifest, origin
+      });
+      result.src.should.equal(`${origin}/mock-image-48x48.png`);
+    });
+    it('prefers an exact size match over `sizes: "any"`', async () => {
+      const manifest = mockManifests.anyAndExactManifest;
+      const result = await manifestClient.getManifestIcon({
+        size: 192, manifest, origin
+      });
+      result.src.should.equal(`${origin}/mock-image-192x192.png`);
+    });
+    it('prefers `sizes: "any"` over an inexact size match', async () => {
+      const manifest = mockManifests.anyAndExactManifest;
+      const result = await manifestClient.getManifestIcon({
+        size: 64, manifest, origin
+      });
+      result.src.should.equal(`${origin}/mock-image.svg`);
+    });
+  });
+
   describe(`'/manifest.json' With Favicon Fallback Tests`, () => {
     it('no manifest exists with favicon',
       async () => {
