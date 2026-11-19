@@ -1,5 +1,15 @@
 # @digitalbazaar/web-app-manifest-utils ChangeLog
 
+## 2.1.1 - 2026-mm-dd
+
+### Fixed
+- Choose icons with `"sizes": "any"` (allowed by the web app manifest spec and
+  common for SVG icons). Without this fix, such an icon is skipped as
+  non-square because its size parses to `NaN`, no icon is chosen, and
+  `WebAppManifestClient` falls back to `/favicon.ico`. With this fix, an `any`
+  icon is chosen for any requested size, unless an icon with an exact size
+  match exists, which is still preferred.
+
 ## 2.1.0 - 2024-10-15
 
 ### Changed

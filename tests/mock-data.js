@@ -58,4 +58,27 @@ export const mockManifests = {
     background_color: '#ffffff',
     display: 'standalone'
   },
+  anySizeManifest: {
+    name: 'Mock Any Size Manifest',
+    icons: [
+      {src: '/mock-image.svg', sizes: 'any', type: 'image/svg+xml'}
+    ]
+  },
+  sizeListManifest: {
+    name: 'Mock Size List Manifest',
+    icons: [
+      {src: '/mock-image-48x48.png', sizes: '48x48 96x96', type: 'image/png'}
+    ]
+  },
+  anyAndExactManifest: {
+    name: 'Mock Any And Exact Manifest',
+    icons: [
+      {src: '/mock-image.svg', sizes: 'any', type: 'image/svg+xml'},
+      {
+        src: '/mock-image-192x192.png',
+        sizes: '192x192',
+        type: 'image/png'
+      }
+    ]
+  },
 };
